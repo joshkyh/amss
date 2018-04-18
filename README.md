@@ -26,3 +26,4 @@ in the source package).
 
 [1] Zhang, J. and Vaver, J. (2017)
     [Introduction to the Aggregate Marketing System Simulator](https://research.google.com).
+# amss
