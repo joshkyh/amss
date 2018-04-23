@@ -164,11 +164,11 @@ sim.data <- SimulateAMSS(
 burn.in.length <- 52
 final.year.end <- n.years * 52
 final.year.start <- final.year.end - 51
-observed.data <- sim.data$data[(burn.in.length + 1):final.year.end, ]
 
-observed.data[,
-              market.rate :=
-                market.rate.seas[(burn.in.length + 1):final.year.end]]
+#observed.data <- sim.data$data[(burn.in.length + 1):final.year.end, ]
+
+
+observed.data <- sim.data$data
 
 dirname(rstudioapi::getSourceEditorContext()$path)
 fName = paste0(dirname(rstudioapi::getSourceEditorContext()$path),'/ObservedData.csv')
