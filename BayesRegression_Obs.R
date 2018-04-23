@@ -5,7 +5,35 @@ data <- read.csv(text = getURL("https://raw.githubusercontent.com/joshkyh/amss/m
 
 data <- data[, c('revenue', 'tv.spend', 'search.spend')]
 
-data$TVxSearch <- data$tv.spend * data$search.spend
+# Simplify column names
+names(data) <- c('revenue', 'tv', 'search')
+
+
+
+# Created lagged variables
+library(Hmisc)
+data$revenue.lag1y <- Lag(data$revenue, 52)
+data$revenue.lag3m <- Lag(data$revenue, 13)
+data$revenue.lag1w <- Lag(data$revenue, 1)
+
+
+# Create moving average
+library(zoo)
+
+data$tv_lag1w <- Lag(data$tv, 1)
+data$search_lag1w <- Lag(data$search, 1)
+
+data$tv_p3m <- rollmean(data$tv, k=13, fill=NA, align = "right")
+data$search_p3m <- rollmean(data$search, k=13, fill= NA, align = "right")
+
+data$tv_p1y <- rollmean(data$tv, k=52, fill=NA, align = "right")
+data$search_p1y <- rollmean(data$search, k=52, fill= NA, align = "right")
+
+
+# Drop first year data
+data <- data[53:nrow(data),]
+
+# Fit the Bayesian Adaptive Sampling Model
 
 library(BAS)
 bas.fit = bas.lm(revenue ~ .
@@ -14,7 +42,7 @@ bas.fit = bas.lm(revenue ~ .
                   , modelprior = uniform()
                   , method = "deterministic")
 
-diagnostics(bas.fit)
+summary(bas.fit)
 
 plot(bas.fit, which =1, add.smooth = F)
 plot(bas.fit, which = 2, add.smooth = F)
@@ -26,6 +54,5 @@ plot(bas.fit, which=4)
 image(bas.fit, rotate =F)
 
 coef.ZS = coef(bas.fit)
-plot(bas.fit)
-
+plot(coef.ZS)
 
