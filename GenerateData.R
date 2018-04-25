@@ -1,12 +1,6 @@
-
-
-
 install.packages("devtools")
-
 library(devtools)
-
 install_github("google/amss")
-
 
 
 library(amss)
@@ -164,9 +158,6 @@ sim.data <- SimulateAMSS(
 burn.in.length <- 52
 final.year.end <- n.years * 52
 final.year.start <- final.year.end - 51
-
-#observed.data <- sim.data$data[(burn.in.length + 1):final.year.end, ]
-
 
 observed.data <- sim.data$data
 
